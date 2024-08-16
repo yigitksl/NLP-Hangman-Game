@@ -7,7 +7,7 @@
 import os
 import random
 
-directory_path = os.path.join(os.path.dirname(__file__), 'gamedata')
+directory_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'gamedata')
 
 def connlu_scanner(directory, max_length=20, rare_threshold=10):
     """
