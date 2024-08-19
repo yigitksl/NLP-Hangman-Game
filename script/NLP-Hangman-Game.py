@@ -11,8 +11,8 @@ directory_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'gamed
 
 def connlu_scanner(directory, max_length=20, rare_threshold=10):
     """
-    Scans CoNLL-U files in the gamedata directory, loading sentences while applying several filters:
-    sentences are limited by length, and those containing rare words are omitted.
+    Scans .connlu files in the gamedata directory, loads sentences while applying several filters.
+    Sentences are limited by length, and those containing rare words are omitted.
     
     Args:
     - directory (str): The directory containing .conllu files to be processed.
@@ -20,8 +20,8 @@ def connlu_scanner(directory, max_length=20, rare_threshold=10):
     - rare_threshold (int): The threshold below which words are considered 'rare'.
     
     Returns:
-    - list of list of tuples: A list where each element represents a sentence. Each sentence
-      is itself a list of (word, POS tag) tuples, filtered according to the specified criteria.
+    - A list of tuples: A list where each element represents a sentence. Each sentence
+      is itself a list of (word, POS tag) tuples.
     """
     word_counts = {}  # To hold the count of each word across all sentences.
     all_sentences = []  # Temporary storage for all sentences, prior to filtering for rare words.
@@ -31,9 +31,9 @@ def connlu_scanner(directory, max_length=20, rare_threshold=10):
         if filename.endswith(".conllu"):
             file_path = os.path.join(directory, filename)
             with open(file_path, 'r', encoding='utf-8') as file:
-                current_sentence = []  # Holds the current sentence being read from the file.
+                current_sentence = []  # Hold the current sentence being read from the file.
                 for line in file:
-                    if line.strip() == "":  # Empty line signifies end of a sentence in CoNLL-U format.
+                    if line.strip() == "":
                         # Check if the sentence's length is within the specified bounds before adding.
                         if 5 <= len(current_sentence) <= max_length:
                             all_sentences.append(current_sentence)
@@ -42,9 +42,9 @@ def connlu_scanner(directory, max_length=20, rare_threshold=10):
                                 word_counts[word.lower()] = word_counts.get(word.lower(), 0) + 1
                         current_sentence = []  # Reset for the next sentence.
                     elif not line.startswith('#'):  # Ignore comment lines.
-                        parts = line.split('\t')  # CoNLL-U fields are separated by tabs.
+                        parts = line.split('\t')
                         if len(parts) > 3:
-                            # Normalize word to lowercase to ensure consistent counting and add it to the current sentence.
+                            # Normalize word to lowercase for consistent counting and add it to the current sentence.
                             token, pos_tag = parts[1].lower(), parts[3]
                             current_sentence.append((token, pos_tag))
                 # After file end, check and add the last sentence if it wasn't followed by a newline.
@@ -62,8 +62,8 @@ def connlu_scanner(directory, max_length=20, rare_threshold=10):
 
 def sentence_processor(sentences, min_length=5, max_length=20, rare_threshold=10):
     """
-    Process the sentences to apply several filters: convert all words to lowercase, 
-    remove sentences shorter than 5 or longer than 20, and exclude sentences 
+    This function Processes the sentences to apply several filters: convert all words to lowercase, 
+    remove sentences shorter than 5 or longer than 20 and exclude sentences 
     containing rare words.
 
     Args:
@@ -78,8 +78,8 @@ def sentence_processor(sentences, min_length=5, max_length=20, rare_threshold=10
       this threshold will be excluded.
 
     Returns:
-    - list of list of str: A filtered list of sentences after applying all the specified criteria. 
-      Each sentence is represented as a list of lowercase words (tokens).
+    - A list of str: A filtered list of sentences after applying all the specified criteria. 
+      Each sentence is represented as a list of lowercase words.
     """
     # Convert to lowercase and filter by sentence length
     sentences = [[token.lower() for token in sentence] for sentence in sentences if min_length <= len(sentence) <= max_length]
@@ -104,7 +104,7 @@ def sentence_processor(sentences, min_length=5, max_length=20, rare_threshold=10
 
 def vowel_counter(word):
     """
-    Count the number of vowels in a word, which will be used as a hint for the user.
+    Counts the number of vowels in a word which will then be used as a hint for the user.
     """
     # Define the vowels to look for.
     vowels = 'aeiouAEIOU'
@@ -113,7 +113,7 @@ def vowel_counter(word):
 
 def hint_generator(word, pos_tag):
     """
-    Generate a set of hints for a given word, leveraging its length, POS tag, and the number of vowels.
+    Generates a set of hints for a given word derived from its length, POS tag and the number of vowels.
     """
     # Create a list of hints based on the word and POS tag.
     hints = [
@@ -149,7 +149,7 @@ def play_the_game(sentences):
     
     # Loop through each word in the sentence.
     for index, (word, pos_tag) in enumerate(sentence_with_pos):
-        if not word.isalpha():  # If the word is not alphabetic, such as punctuation, skip it.
+        if not word.isalpha():  # If the word is not alphabetic, skip it.
             display_sentence[index] = word  # Directly reveal punctuation and numerals.
             continue
         
@@ -196,7 +196,6 @@ def play_the_game(sentences):
 
 # Load the sentences from the gamedatafiles.
 sentences = connlu_scanner(directory_path)
-# Start the game with loaded sentences.
 play_the_game(sentences)
 
 
