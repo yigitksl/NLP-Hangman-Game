@@ -44,6 +44,10 @@ def connlu_scanner(directory, max_length=20, rare_threshold=10):
                     elif not line.startswith('#'):  # Ignore comment lines.
                         parts = line.split('\t')
                         if len(parts) > 3:
+                            token_id = parts[0]
+                            # Skip multi-word token lines which have IDs like '2-3'
+                            if '-' in token_id or not token_id.isdigit():
+                                continue
                             # Normalize word to lowercase for consistent counting and add it to the current sentence.
                             token, pos_tag = parts[1].lower(), parts[3]
                             current_sentence.append((token, pos_tag))
@@ -194,9 +198,11 @@ def play_the_game(sentences):
     # Conclude the game with the final score.
     print(f"Congratulations! Your final score is {score}.")
 
-# Load the sentences from the gamedatafiles.
-sentences = connlu_scanner(directory_path)
-play_the_game(sentences)
+# Only start the interactive game when the script is executed directly.
+if __name__ == "__main__":
+    # Load the sentences from the gamedata files.
+    sentences = connlu_scanner(directory_path)
+    play_the_game(sentences)
 
 
 # In[ ]:
