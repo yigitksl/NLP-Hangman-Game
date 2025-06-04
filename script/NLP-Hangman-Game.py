@@ -44,6 +44,10 @@ def connlu_scanner(directory, max_length=20, rare_threshold=10):
                     elif not line.startswith('#'):  # Ignore comment lines.
                         parts = line.split('\t')
                         if len(parts) > 3:
+                            token_id = parts[0]
+                            # Skip multi-word token lines which have IDs like '2-3'
+                            if '-' in token_id or not token_id.isdigit():
+                                continue
                             # Normalize word to lowercase for consistent counting and add it to the current sentence.
                             token, pos_tag = parts[1].lower(), parts[3]
                             current_sentence.append((token, pos_tag))
