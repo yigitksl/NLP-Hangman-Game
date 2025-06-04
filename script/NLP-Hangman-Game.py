@@ -198,9 +198,11 @@ def play_the_game(sentences):
     # Conclude the game with the final score.
     print(f"Congratulations! Your final score is {score}.")
 
-# Load the sentences from the gamedatafiles.
-sentences = connlu_scanner(directory_path)
-play_the_game(sentences)
+# Only start the interactive game when the script is executed directly.
+if __name__ == "__main__":
+    # Load the sentences from the gamedata files.
+    sentences = connlu_scanner(directory_path)
+    play_the_game(sentences)
 
 
 # In[ ]:
