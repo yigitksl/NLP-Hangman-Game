@@ -35,3 +35,14 @@ To play the game, clone the repository to your local machine, locate the script 
 Type ? to receive a hint. You can receive up to 3 hints per word.
 You have 4 attempts to guess each word correctly.
 Your score is based on correct guesses with penalties for wrong guesses and using hints.
+
+## Running Tests
+
+This project includes a small test suite using `pytest`.
+To run the tests, install `pytest` (e.g. `pip install pytest`) and
+execute `pytest` from the repository root:
+
+```bash
+pip install pytest
+pytest
+```
