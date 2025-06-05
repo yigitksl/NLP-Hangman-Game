@@ -6,6 +6,7 @@
 
 import os
 import random
+import sys
 
 directory_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'gamedata')
 
@@ -127,6 +128,55 @@ def hint_generator(word, pos_tag):
     ]
     return hints
 
+
+def init_graphics():
+    """Initialize a simple pygame window for the hangman figure."""
+    try:
+        import pygame
+    except ImportError:
+        print("pygame is required for graphics mode. Install it with 'pip install pygame'.")
+        return None
+
+    pygame.init()
+    screen = pygame.display.set_mode((200, 300))
+    pygame.display.set_caption("Hangman")
+    return screen
+
+
+def draw_hangman(screen, stage):
+    """Draw the hangman figure up to the given stage."""
+    import pygame
+
+    # Base structure
+    screen.fill((255, 255, 255))
+    pygame.draw.line(screen, (0, 0, 0), (20, 280), (180, 280), 2)
+    pygame.draw.line(screen, (0, 0, 0), (50, 280), (50, 40), 2)
+    pygame.draw.line(screen, (0, 0, 0), (50, 40), (130, 40), 2)
+    pygame.draw.line(screen, (0, 0, 0), (130, 40), (130, 70), 2)
+
+    if stage >= 1:
+        pygame.draw.circle(screen, (0, 0, 0), (130, 90), 20, 2)
+    if stage >= 2:
+        pygame.draw.line(screen, (0, 0, 0), (130, 110), (130, 170), 2)
+    if stage >= 3:
+        pygame.draw.line(screen, (0, 0, 0), (130, 120), (100, 150), 2)
+        pygame.draw.line(screen, (0, 0, 0), (130, 120), (160, 150), 2)
+    if stage >= 4:
+        pygame.draw.line(screen, (0, 0, 0), (130, 170), (100, 220), 2)
+        pygame.draw.line(screen, (0, 0, 0), (130, 170), (160, 220), 2)
+
+    pygame.display.flip()
+    pygame.event.pump()
+
+
+def quit_graphics():
+    """Shut down pygame if it was initialized."""
+    try:
+        import pygame
+        pygame.quit()
+    except ImportError:
+        pass
+
 def play_the_game(sentences):
     """
     Initialize the game using the processed sentences.
@@ -198,9 +248,76 @@ def play_the_game(sentences):
     # Conclude the game with the final score.
     print(f"Congratulations! Your final score is {score}.")
 
+
+def play_the_game_gui(sentences):
+    """Play the game with a minimal pygame hangman display."""
+    screen = init_graphics()
+    if screen is None:
+        play_the_game(sentences)
+        return
+
+    if not sentences:
+        print("No sentences available to play the game.")
+        return
+
+    sentence_with_pos = random.choice(sentences)
+    sentence, pos_tags = zip(*sentence_with_pos)
+    display_sentence = ['_'*len(word) if word.isalpha() else word for word in sentence]
+
+    print("Welcome to the sentence guessing game! Your challenge is to guess the words and complete the sentence.")
+    print("Ready to play?")
+    print("The sentence has {} words. What's the first one?".format(len(sentence)))
+    print(' '.join(display_sentence))
+
+    score = 0
+
+    for index, (word, pos_tag) in enumerate(sentence_with_pos):
+        if not word.isalpha():
+            display_sentence[index] = word
+            continue
+
+        hints = hint_generator(word, pos_tag)
+        attempts = 4
+        used_hints = 0
+
+        while attempts > 0:
+            guess = input(f"Your guess: ").lower().strip()
+            normalized_word = word.lower().strip()
+
+            if guess == "?":
+                if used_hints < len(hints):
+                    print(hints[used_hints])
+                    used_hints += 1
+                else:
+                    print("No more hints available.")
+                continue
+
+            if guess == normalized_word:
+                print("Great! What's the next word?")
+                display_sentence[index] = word
+                print(' '.join(display_sentence))
+                score += 30 - (used_hints * 5)
+                break
+            else:
+                attempts -= 1
+                draw_hangman(screen, 4 - attempts)
+                print(f"Wrong! Try another word or ask for a hint. {attempts} attempts left.")
+
+        if attempts == 0:
+            print(f"The correct word was '{word}'.")
+            display_sentence[index] = word
+            print(' '.join(display_sentence))
+            score -= 10
+
+    print(f"Congratulations! Your final score is {score}.")
+    quit_graphics()
+
 if __name__ == "__main__":
     sentences = connlu_scanner(directory_path)
-    play_the_game(sentences)
+    if "--gui" in sys.argv:
+        play_the_game_gui(sentences)
+    else:
+        play_the_game(sentences)
 
 
 # In[ ]:

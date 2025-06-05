@@ -31,7 +31,14 @@ Game Features:
 
 How to Run:
 
-To play the game, clone the repository to your local machine, locate the script folder using the cd command on your terminal and run the script. No additional python libraries are required.
+To play the game, clone the repository to your local machine and run the script from the `script` folder.
+By default the game runs in the console. If you want a small graphical window displaying a hangman figure, install `pygame` and start the script with the `--gui` option:
+
+```bash
+pip install pygame
+python NLP-Hangman-Game.py --gui
+```
+You can still run the game without installing `pygame`.
 Type ? to receive a hint. You can receive up to 3 hints per word.
 You have 4 attempts to guess each word correctly.
 Your score is based on correct guesses with penalties for wrong guesses and using hints.
