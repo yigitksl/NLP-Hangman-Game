@@ -82,8 +82,8 @@ def sentence_processor(sentences, min_length=5, max_length=20, rare_threshold=10
       this threshold will be excluded.
 
     Returns:
-    - A list of str: A filtered list of sentences after applying all the specified criteria. 
-      Each sentence is represented as a list of lowercase words.
+    - A list of list of str: A filtered list of sentences after applying all the specified
+      criteria. Each sentence is represented as a list of lowercase words.
     """
     # Convert to lowercase and filter by sentence length
     sentences = [[token.lower() for token in sentence] for sentence in sentences if min_length <= len(sentence) <= max_length]
