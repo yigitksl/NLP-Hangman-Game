@@ -7,7 +7,7 @@ This repository contains my final project for the "Basic Programming" course as 
 In the first part of the project, I conducted an analysis of the GUM corpus, accessible at https://github.com/amir-zeldes/gum/tree/master . The GUM corpus is a collection of various texts organized into separate genres. My focus was on the comparison between the fiction and news genres. I analyzed the corpus using various natural language processing techniques.
 My tasks included:
 
-    Frequency Analysis: Identifying and plottingthe 100 most frequent words in each genre.
+    Frequency Analysis: Identifying and plotting the 100 most frequent words in each genre.
     Rare Words Visualization: Creating word clouds for words that appeared less than 10 times.
     POS Tag Distribution: Analyzing and visualizing the distribution of Part-of-Speech (POS) tags.
     Sentence Length Distribution: Comparing the sentence length distribution across genres.
