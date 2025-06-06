@@ -43,6 +43,34 @@ Type ? to receive a hint. You can receive up to 3 hints per word.
 You have 4 attempts to guess each word correctly.
 Your score is based on correct guesses with penalties for wrong guesses and using hints.
 
+## Building a Standalone Executable
+
+If you'd like to run the game without a Python installation, you can create a
+standalone executable using [PyInstaller](https://pyinstaller.org/).
+
+First, install `pyinstaller`:
+
+```bash
+pip install pyinstaller
+```
+
+Run the appropriate build script for your operating system:
+
+On **Windows**:
+
+```cmd
+build_exe.bat
+```
+
+On **macOS/Linux**:
+
+```bash
+./build_exe.sh
+```
+
+The executable will be placed in the `dist` directory. Build scripts must be run
+on the operating system for which you want the executable.
+
 ## Running Tests
 
 This project includes a small test suite using `pytest`.
