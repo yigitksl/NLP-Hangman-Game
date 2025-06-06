@@ -8,7 +8,19 @@ import os
 import random
 import sys
 
-directory_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'gamedata')
+
+def get_data_directory():
+    """Return the path to the bundled ``gamedata`` directory."""
+    if getattr(sys, "frozen", False):
+        # When bundled by PyInstaller, data files are extracted to ``_MEIPASS``
+        base_dir = sys._MEIPASS  # type: ignore[attr-defined]
+    else:
+        # When running from source, ``gamedata`` sits next to ``script``
+        base_dir = os.path.dirname(os.path.dirname(__file__))
+    return os.path.join(base_dir, "gamedata")
+
+
+directory_path = get_data_directory()
 
 def connlu_scanner(directory, max_length=20, rare_threshold=10):
     """
